@@ -6,6 +6,14 @@ Tests are derived only from SPEC.md and the rendered live website. No website so
 
 Chromium against `https://justinchewej.github.io/JustinCEJ-site/`: 11 passed, 1 skipped. TypeScript checks passed. The initial run had two fixture-related failures: repository URLs used an unrelated account while the observed API request was for JustinChewEJ. The rendered card constructed the link using that account and the fixture name. Fixtures now use the account requested by the browser; the exact expected repository link assertion is retained. No confirmed site failures were found.
 
+## Issue #4 test-first baseline, 2026-10-06
+
+Five new independent tests cover SPEC.md:17–21 before implementation begins. The unchanged live site fails all five because it has no button with accessible name `Back to top`; its existing footer link does not satisfy the new button requirement. This is an expected red baseline, not an ambiguous failure. Existing tests were not modified and none of the new requirements were skipped.
+
+The wording is explicit: past hero means the hero's **bottom edge** is at or above the viewport's top, not that its top edge has passed. The boundary test checks initial hidden state, a partially visible hero with 20px remaining, and the bottom-edge boundary. Other tests cover click-to-top/hide, keyboard Enter activation/focus, and a 375px viewport.
+
+The new no-arrow assertion detects common Unicode arrow glyphs in text and pseudo-element content. The earlier definition ambiguity still applies to image, SVG and CSS-drawn shapes, which require visual review. Visible focus uses the same outline-or-shadow check as Issue #1; no numerical contrast threshold is specified.
+
 - SPEC.md:6 does not specify the repository API endpoint, card markup, exact fallback copy, ordering, or null-field behavior. Network mocking targets the public GitHub REST repository endpoint observed in browser requests. Empty/error checks use semantic wording, not exact copy. Null fields, pagination and ordering are outside the specified assertions.
 - SPEC.md:7 does not specify link destinations beyond their services; tests check mailto, GitHub and LinkedIn destinations.
 - SPEC.md:9 does not define arrow icons (text glyphs, SVGs, font icons, images, or CSS shapes). The arrow check is explicitly skipped pending a definition and visual review. Gradient checks inspect computed background images, including pseudo-elements; image contents require visual review.

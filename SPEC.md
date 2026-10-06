@@ -12,3 +12,10 @@
 - A button in the navigation toggles a dark class on body and switches between readable light and dark colours.
 - The selected mode survives reloads in the same tab for that tab's session. A fresh session starts in light mode.
 - The button works with the keyboard, has visible focus, and exposes its current state with aria-pressed.
+
+## Issue #4: back-to-top button
+- Add a back-to-top button available while scrolling; the existing footer link may remain.
+- The button is hidden while any part of #hero remains in the viewport, and visible when #hero's bottom edge is at or above the viewport's top edge. Past hero means its bottom edge, not its top edge.
+- Clicking the button returns the page to the top and hides the button.
+- The button has the accessible name Back to top, supports keyboard activation, and has visible keyboard focus.
+- The button is responsive, uses no gradients or arrow icons, and causes no horizontal overflow at a viewport width of 375px.
