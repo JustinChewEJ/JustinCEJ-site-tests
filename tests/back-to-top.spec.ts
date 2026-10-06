@@ -19,7 +19,7 @@ test('SPEC.md:18 — visibility follows the hero bottom edge, not its top edge',
   await page.locator('#hero').evaluate(el => window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().bottom - 20, behavior: 'instant' }));
   await expect.poll(() => page.locator('#hero').evaluate(el => el.getBoundingClientRect().bottom)).toBeGreaterThan(0);
   await expect(button(page)).toBeHidden();
-  await page.locator('#hero').evaluate(el => window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().bottom, behavior: 'instant' }));
+  await page.locator('#hero').evaluate(el => window.scrollTo({ top: Math.ceil(window.scrollY + el.getBoundingClientRect().bottom), behavior: 'instant' }));
   await expect.poll(() => page.locator('#hero').evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(0);
   await expect(button(page)).toBeVisible();
 });

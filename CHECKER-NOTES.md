@@ -14,6 +14,14 @@ The wording is explicit: past hero means the hero's **bottom edge** is at or abo
 
 The new no-arrow assertion detects common Unicode arrow glyphs in text and pseudo-element content. The earlier definition ambiguity still applies to image, SVG and CSS-drawn shapes, which require visual review. Visible focus uses the same outline-or-shadow check as Issue #1; no numerical contrast threshold is specified.
 
+## Issue #4 independent local verification, 2026-10-06
+
+After the builder supplied the rendered site at `http://127.0.0.1:8000`, the unchanged full suite initially returned 15 passed, 1 failed and the existing arrow-definition skip. The failed SPEC.md:18 test never reached its visibility assertion: Chromium rounded the requested fractional scroll position, leaving the hero bottom at `0.046875px` rather than at or above zero.
+
+The checker corrected only the boundary scroll setup to `Math.ceil(window.scrollY + hero.getBoundingClientRect().bottom)`, so the requested position reaches the first whole pixel at or past the hero bottom. The strict `bottom <= 0` precondition and visible-button assertion remain unchanged. This fixes test geometry rather than changing the acceptance requirement.
+
+The full local Chromium suite then returned **16 passed, 1 existing skip**, including all five new Issue #4 tests. TypeScript checks passed. This follows the five expected live failures recorded before implementation in test-first commit `5d21595`. No site source or diff was read and no site files were edited.
+
 - SPEC.md:6 does not specify the repository API endpoint, card markup, exact fallback copy, ordering, or null-field behavior. Network mocking targets the public GitHub REST repository endpoint observed in browser requests. Empty/error checks use semantic wording, not exact copy. Null fields, pagination and ordering are outside the specified assertions.
 - SPEC.md:7 does not specify link destinations beyond their services; tests check mailto, GitHub and LinkedIn destinations.
 - SPEC.md:9 does not define arrow icons (text glyphs, SVGs, font icons, images, or CSS shapes). The arrow check is explicitly skipped pending a definition and visual review. Gradient checks inspect computed background images, including pseudo-elements; image contents require visual review.
