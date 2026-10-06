@@ -34,7 +34,10 @@ test('SPEC.md:19 — clicking returns to page top and hides the button', async (
 });
 
 test('SPEC.md:20 — accessible Back to top name, keyboard activation and visible focus', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.route(/https:\/\/api\.github\.com\/users\/[^/]+\/repos(?:\?|$)/, route => route.fulfill({ contentType: 'application/json', body: '[]' }));
   await page.goto('./');
+  await expect(page.locator('#repos')).toContainText(/no (?:public )?repositories/i);
   await scrollPastHero(page);
   await expect(button(page)).toHaveCount(1);
   await expect(button(page)).toBeVisible();

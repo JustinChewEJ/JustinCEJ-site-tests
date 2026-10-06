@@ -22,6 +22,14 @@ The checker corrected only the boundary scroll setup to `Math.ceil(window.scroll
 
 The full local Chromium suite then returned **16 passed, 1 existing skip**, including all five new Issue #4 tests. TypeScript checks passed. This follows the five expected live failures recorded before implementation in test-first commit `5d21595`. No site source or diff was read and no site files were edited.
 
+## Keyboard test timing correction, 2026-10-06
+
+Root reported that CI run `37432677224` also failed SPEC.md:20 after 60 Tab attempts, with the button alternating hidden/visible. Rendered-browser investigation showed that Tabs from the page start focus navigation links and scroll back into the hero, hiding the button; subsequent content focus scrolls past the hero and reveals it. Live repository loading changes the number of intervening links. The original local browser reached the button on Tab 21, so the report does not by itself establish a keyboard accessibility defect.
+
+SPEC.md:20 now uses a deterministic empty GitHub response and waits for its rendered message, and requests the browser's supported reduced-motion preference before navigation. It still reaches the button through actual Tab presses and asserts accessible name, visibility, keyboard focus styling, Enter activation, page-top return and hidden state. It does not programmatically focus the button or change site behavior. A separate rendered-browser probe with these settings reached the visible button on Tab 20 in ten consecutive runs.
+
+The committed Playwright keyboard test passed all three repeats, and the full local suite passed **16 tests with 1 existing skip**. No product files were edited.
+
 - SPEC.md:6 does not specify the repository API endpoint, card markup, exact fallback copy, ordering, or null-field behavior. Network mocking targets the public GitHub REST repository endpoint observed in browser requests. Empty/error checks use semantic wording, not exact copy. Null fields, pagination and ordering are outside the specified assertions.
 - SPEC.md:7 does not specify link destinations beyond their services; tests check mailto, GitHub and LinkedIn destinations.
 - SPEC.md:9 does not define arrow icons (text glyphs, SVGs, font icons, images, or CSS shapes). The arrow check is explicitly skipped pending a definition and visual review. Gradient checks inspect computed background images, including pseudo-elements; image contents require visual review.
