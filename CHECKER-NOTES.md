@@ -36,3 +36,15 @@ The committed Playwright keyboard test passed all three repeats, and the full lo
 - SPEC.md:12 says readable colours without a contrast threshold or scope. Automated checks verify changing computed body colours and unequal foreground/background; this does not certify readability. A contrast standard and target elements are needed for that assertion.
 - SPEC.md:13 defines a fresh session but not new-tab behavior. A new isolated browser context represents a fresh session; same-tab reload is checked separately.
 - SPEC.md:14 specifies visible focus without a size/contrast threshold. The keyboard test verifies an outline or shadow and exercises Enter and Space. Visual focus visibility remains subject to review.
+
+## Page-per-menu-item spec update, 2026-10-21
+
+The site was redesigned so each menu item is its own page chosen by the URL hash. At Justin's request, SPEC.md lines 4, 6, 7, 9 and 17–21 were rewritten for that design, and the tests were updated to match. **These tests were written by the builder, not an independent checker**, because Justin asked the builder to update this repo directly. They were written from the new SPEC.md wording, but the builder had seen the site's source, so a later independent review of them is still worthwhile.
+
+- SPEC.md:4 now also checks that only the chosen page is visible, that no hash shows #hero, and that back and forward move between pages.
+- SPEC.md:5 checks every page at 375px, because the pages are no longer on one scroll.
+- SPEC.md:6–8 open `/#repos` or `/#contact` before looking for their content.
+- SPEC.md:17–21 use `/#projects` in a 1280×700 window as the long page and `/#contact` in a 1280×1400 window as the short page. The 200px threshold is checked at 199px (hidden) and 200px (visible).
+- SPEC.md:21 replaces the Unicode arrow check with an icon check (an SVG and no text), a round shape and a size of 64px or less, because the spec now asks for an up chevron.
+
+Local Chromium run against the committed `ui-review-fixes` site: **19 passed, 1 existing skip**, and 57 passed over three repeats.
